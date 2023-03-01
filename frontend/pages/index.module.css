@@ -1,0 +1,130 @@
+@font-face {
+	font-family: 'ColfaxAI';
+	src: url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff2) format('woff2'),
+		url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff) format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+@font-face {
+	font-family: 'ColfaxAI';
+	src: url(https://cdn.openai.com/API/fonts/ColfaxAIBold.woff2) format('woff2'),
+		url(https://cdn.openai.com/API/fonts/ColfaxAIBold.woff) format('woff');
+	font-weight: bold;
+	font-style: normal;
+}
+.main,
+.main input {
+	font-size: 16px;
+	line-height: 24px;
+	color: #353740;
+	font-family: 'ColfaxAI', Helvetica, sans-serif;
+}
+.main {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding-top: 60px;
+}
+.main .icon {
+	width: 10%;
+}
+.main h3 {
+	font-size: 32px;
+	line-height: 40px;
+	font-weight: bold;
+	color: #202123;
+	margin: 16px 0 40px;
+}
+.main form {
+	margin-top: 2rem;
+	display: flex;
+	flex-direction: column;
+	width: 320px;
+}
+/* .main input[type='text'] {
+	padding: 12px 16px;
+	border: 1px solid #10a37f;
+	border-radius: 4px;
+	margin-bottom: 24px;
+	outline-color: #10a37f;
+} */
+.main ::placeholder {
+	color: #8e8ea0;
+	opacity: 1;
+}
+.main input[type='submit'] {
+	padding: 12px 0;
+	color: #fff;
+	background-color: #10a37f;
+	border: none;
+	border-radius: 4px;
+	text-align: center;
+	cursor: pointer;
+}
+.main .result {
+	font-weight: bold;
+	margin-top: 40px;
+}
+
+.chat {
+	display: block;
+	width: 70%;
+	height: 20rem;
+	overflow-y: scroll;
+	scroll-behavior: smooth;
+	border: 3px solid #767676;
+	border-radius: 1em;
+	padding-left: 1rem;
+	padding-right: 1rem;
+	padding-bottom: 1rem;
+}
+
+.container_user {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.container_support {
+	display: flex;
+	justify-content: flex-start;
+}
+
+.chat_bubble_user {
+	/* Margins */
+	margin-top: 0.3rem;
+	margin-right: -0.4rem;
+
+	/* Padding */
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
+
+	border-radius: 20px;
+	font-size: 16px;
+	line-height: 0.8;
+	align-self: flex-end;
+	background-color: #0084ff;
+	color: #fff;
+
+	/* make the width flexible */
+	float: right;
+}
+
+.chat_bubble_support {
+	/* Margins */
+	margin-top: 0.3rem;
+	margin-left: -0.4rem;
+
+	/* Padding */
+	padding-left: 0.5rem;
+	padding-right: 0.5rem;
+
+	border-radius: 20px;
+	font-size: 16px;
+	line-height: 0.8;
+	align-self: flex-start;
+	background-color: #6363636a;
+	color: #333;
+
+	/* make the width flexible. I have no Idea why this works it just does. */
+	float: left;
+}
