@@ -18,6 +18,7 @@ app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
 	next();
 });
+app.use(express.static(process.cwd()+"/frontend/build"));
 
 /* Helper Functions */
 function parseLog(fileContent) {
@@ -97,6 +98,9 @@ app.get('/generateAiResponse', async (req, res) => {
 });
 
 
+app.get('/' , (req, res) => {
+	res.sendFile(process.cwd()+"/frontend/build/index.html");
+});
 
 /* Log Managing */
 async function deleteOldFiles() {
