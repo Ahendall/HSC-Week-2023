@@ -5,24 +5,8 @@ import image from './img/Techsupport.png';
 import './App.css';
 
 function App() {
-	const [message, setMessage] = useState('');
 	const [log, setLog] = useState([]);
-	const [userInput, setUserInput] = useState('');
 	const [userInField, setUserInField] = useState('');
-
-	const getMessage = async () => {
-		process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
-		const url = process.env.REACT_APP_GET_MESSAGE;
-		const res = await fetch(url, {
-			method: 'GET',
-			mode: 'cors',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		});
-		const data = await res.json();
-		setMessage(data.message);
-	};
 
 	const getLog = async () => {
 		process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
@@ -38,7 +22,20 @@ function App() {
 		setLog(data);
 	};
 
-	const askQuestion = async () => {
+	const generateResponse = async () => {
+		process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
+		const url = process.env.REACT_APP_GENERATE_RESPONSE;
+		const res = await fetch(url, {
+			method: 'get',
+			mode: 'cors',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		const data = await res.json();
+	};
+
+	const askQuestion = async (input) => {
 		process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 		const url = process.env.REACT_APP_ASK_QUESTION;
 		const res = await fetch(url, {
@@ -48,24 +45,23 @@ function App() {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				message: userInput,
+				message: input,
 			}),
 		});
 	};
 
 	const onSubmit = async (event) => {
-		setUserInput(userInField);
+		let input = userInField;
 		setUserInField('');
 		event.preventDefault();
-		await askQuestion();
+		await askQuestion(input);
+		await getLog();
+		await generateResponse();
 		await getLog();
 	};
 
 	useEffect(() => {
-		getMessage();
 		getLog();
-		console.log("This is the log: \n");
-		console.log(log);
 	}, []);
 
 	return (

@@ -6,6 +6,7 @@ const { userInfo } = require('os');
 const path = require('path');
 const bodyParser = require('body-parser');
 const port = 8080;
+const generateText = require('./OpenAI-Generate');
 
 /* App Init */
 const app = express();
@@ -18,33 +19,8 @@ app.use((req, res, next) => {
 	next();
 });
 
-/* Routes */
-app.get('/message', (req, res) => {
-	res.json({ message: 'Hello World!' });
-});
-
-// app.get('/getIp', (req, res) => {
-// 	const ipAddr = req.ip;
-// 	res.json({ ipAddr });
-// })
-
-/* Function that returns the log as a json array given the user IP */
-app.get('/getLog', (req, res) => {
-	let ip = req.ip.replace(/:/g, '.');
-	let filename = util.format('logs/%s.log', ip);
-
-	/* Check if file exists */
-	if (!fs.existsSync(filename)) {
-		fs.writeFile(filename, '[Support]: How can I help you today?$!', function (err) {
-			if (err) throw err;
-			console.log('Saved!');
-		});
-	}
-
-	// Read file and return contents
-	let fileContent = fs.readFileSync(filename, 'utf8');
-	console.log(fileContent);
-
+/* Helper Functions */
+function parseLog(fileContent) {
 	let logArray = [];
 	let counter = -1; // hacky fix but works so whatevs
 
@@ -72,12 +48,32 @@ app.get('/getLog', (req, res) => {
 		}
 	}
 
-	console.log(logArray);
+	return logArray;
+}
+
+/* Routes */
+/* Function that returns the log as a json array given the user IP */
+app.get('/getLog', (req, res) => {
+	let ip = req.ip.replace(/:/g, '.');
+	let filename = util.format('logs/%s.log', ip);
+
+	/* Check if file exists */
+	if (!fs.existsSync(filename)) {
+		fs.writeFile(filename, '[Support]: How can I help you today?$!', function (err) {
+			if (err) throw err;
+			console.log('Wrote to new File and saved!');
+		});
+	}
+
+	// Read file and return contents
+	let fileContent = fs.readFileSync(filename, 'utf8');
+	let logArray = parseLog(fileContent);
 	res.json(JSON.parse(JSON.stringify(logArray)));
 });
 
+/* Function that saves the user's question to the log */
+/* Client Side should also request to generate a response, which will be handled by a seperate function*/
 app.post('/askQuestion', jsonParser, (req, res) => {
-	console.log(req.body);
 	let question = req.body.message;
 	let ip = req.ip.replace(/:/g, '.');
 	let filename = util.format('logs/%s.log', ip);
@@ -85,12 +81,20 @@ app.post('/askQuestion', jsonParser, (req, res) => {
 
 	fs.appendFile(filename, fileLine, function (err) {
 		if (err) throw err;
-		console.log('Saved!');
+		console.log('Question asked and saved!');
 	});
 
-	res.json({ status: 'saved' });
+	res.json({ status: 'success' });
 });
 
+/* Function that generates and saves the support's response to the log */
+app.get('/generateAiResponse', async (req, res) => {
+	let ip = req.ip.replace(/:/g, '.');
+	let filename = util.format('logs/%s.log', ip);
+	let response = await generateText(filename);
+	
+	res.json({ response: response });
+});
 
 
 
@@ -114,9 +118,7 @@ async function deleteOldFiles() {
 			console.log(`Skipping file: ${filePath}`);
 		}
 	}
-}
-
-setInterval(deleteOldFiles, 5 * 60 * 1000);
+} setInterval(deleteOldFiles, 5 * 60 * 1000);
 
 
 

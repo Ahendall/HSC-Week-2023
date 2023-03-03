@@ -139,13 +139,15 @@
   
 	  border-radius: 20px;
 	  font-size: 16px;
-	  line-height: 0.8;
+	  line-height: 1;
 	  align-self: flex-end;
 	  background-color: #0084ff;
 	  color: #fff;
   
 	  /* make the width flexible */
 	  float: right;
+	  max-width: 60%;
+	  text-align: left;
   }
   
   .chat_bubble_support {
@@ -159,12 +161,14 @@
   
 	  border-radius: 20px;
 	  font-size: 16px;
-	  line-height: 0.8;
+	  line-height: 1;
 	  align-self: flex-start;
 	  background-color: #6363636a;
 	  color: #333;
   
 	  /* make the width flexible. I have no Idea why this works it just does. */
 	  float: left;
+	  max-width: 60%;
+	  text-align: left;
   }
   
