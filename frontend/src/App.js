@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import TextField from '@mui/material/TextField';
 import { Helmet } from 'react-helmet';
 import image from './img/Techsupport.png';
@@ -7,6 +7,14 @@ import './App.css';
 function App() {
 	const [log, setLog] = useState([]);
 	const [userInField, setUserInField] = useState('');
+	const messagesEndRef = useRef(null);
+
+	const scrollToBottom = () => {
+		const myDiv = messagesEndRef.current;
+		const { scrollTop, scrollHeight, clientHeight } = myDiv;
+    	const scrollPosition = scrollHeight - clientHeight;
+    	myDiv.scrollTop = scrollPosition > 0 ? scrollPosition : 0;
+	};
 
 	const getLog = async () => {
 		process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
@@ -19,7 +27,8 @@ function App() {
 			},
 		});
 		const data = await res.json();
-		setLog(data);
+		await setLog(data);
+		scrollToBottom();
 	};
 
 	const generateResponse = async () => {
@@ -76,7 +85,7 @@ function App() {
 				<p style={{marginTop: '-4%', color: '#AAAAAA'}}>Please note that conversations are reset after 10 minutes of inactivity.</p>
 
 				{/* Chatbox Area */}
-				<div className="chat">
+				<div  ref={messagesEndRef} className="chat">
 					{log.map((logLine) => (
 						<div className={logLine.id === 'User' ? 'container_user' : 'container_support'}>
 							<div key={logLine.id} className={logLine.id === 'User' ? 'chat_bubble_user' : 'chat_bubble_support'}>
