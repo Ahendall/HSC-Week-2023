@@ -56,7 +56,7 @@ function parseLog(fileContent) {
 /* Function that returns the log as a json array given the user IP */
 app.get('/getLog', (req, res) => {
 	let ip = req.ip.replace(/:/g, '.');
-	let filename = util.format('logs/%s.log', ip);
+	let filename = util.format('userInteractionLogs/%s.log', ip);
 
 	/* Check if file exists */
 	if (!fs.existsSync(filename)) {
@@ -77,7 +77,7 @@ app.get('/getLog', (req, res) => {
 app.post('/askQuestion', jsonParser, (req, res) => {
 	let question = req.body.message;
 	let ip = req.ip.replace(/:/g, '.');
-	let filename = util.format('logs/%s.log', ip);
+	let filename = util.format('userInteractionLogs/%s.log', ip);
 	let fileLine = util.format('[User]: %s$!', question);
 
 	fs.appendFile(filename, fileLine, function (err) {
@@ -91,7 +91,7 @@ app.post('/askQuestion', jsonParser, (req, res) => {
 /* Function that generates and saves the support's response to the log */
 app.get('/generateAiResponse', async (req, res) => {
 	let ip = req.ip.replace(/:/g, '.');
-	let filename = util.format('logs/%s.log', ip);
+	let filename = util.format('userInteractionLogs/%s.log', ip);
 	let response = await generateText(filename);
 	
 	res.json({ response: response });
@@ -105,11 +105,12 @@ app.get('/' , (req, res) => {
 /* Log Managing */
 async function deleteOldFiles() {
 	console.log('Deleting old files...');
-	const logsDir = path.join(__dirname, 'logs');
+	const logsDir = path.join(__dirname, 'userInteractionLogs');
 	const files = await fs.promises.readdir(logsDir);
 	const now = new Date();
 
 	for (const file of files) {
+		if (file === '.gitkeep' || file === 'example.log') continue; // skip .gitkeep (used to keep the folder in git
 		const filePath = path.join(logsDir, file);
 		const stats = await fs.promises.stat(filePath);
 		const lastModified = new Date(stats.mtimeMs);
