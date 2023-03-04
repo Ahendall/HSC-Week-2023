@@ -82,8 +82,8 @@ function App() {
  			<main className="main">
  				<img src={image} className="icon" alt='' />
 				<h3>Chat With Support</h3>
-				<p style={{marginTop: '-4%', color: '#AAAAAA'}}>Please note that conversations are reset after 10 minutes of inactivity.</p>
-				<p style={{marginTop: '-2.5%', color: '#AAAAAA'}}>If you don't see an initial message, try refreshing the page.</p>
+				<p style={{marginTop: '-2%', color: '#AAAAAA'}}>Please note that conversations are reset after 10 minutes of inactivity.</p>
+				<p style={{marginTop: '-1%', color: '#AAAAAA'}}>If you don't see an initial message, try refreshing the page.</p>
 
 				{/* Chatbox Area */}
 				<div  ref={messagesEndRef} className="chat">
